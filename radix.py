@@ -14,11 +14,11 @@ def bucketize(list_of_data, place=0):
     return dict(bucket)
 
 
-def check_lower_buckets(buckets, num_digits, place=0):
+def check_lower_buckets(buckets, place=0):
     for key in buckets:
         if len(buckets[key]) >= 1 and place < len(buckets[key][0])-1:
             buckets[key] = bucketize(buckets[key],place + 1)
-            check_lower_buckets(buckets[key], num_digits ,place + 1)
+            check_lower_buckets(buckets[key], place + 1)
     return True
 
 def combine_buckets(buckets, result = []):
@@ -32,26 +32,12 @@ def combine_buckets(buckets, result = []):
     return result        
        
 def main():
-    raw_input = input('Enter some numbers (or words) separated by commas:')
-    
-    raw_data = raw_input.replace(' ','').lower().split(',')
-    length = max_length(raw_data)
-    data = []
-    
-    for j in raw_data:
-        if j.isnumeric() and length > len(j):
-            data.append('0' * (length - len(j)) + j)
-        else:
-            data.append(j)
+    data = [ words.strip() for words in open('wordlist.txt','r')]
     
     buckets = bucketize(data)
-    check_lower_buckets(buckets,length)
+    check_lower_buckets(buckets)
     print('\nThe most significant digit radix sort provides the following:\n')
     pprint(buckets)
     
-    result = combine_buckets(buckets)
-    print('\nThe sorted numbers are:\n')
-    pprint(result)
-    print('')
 
 main()
