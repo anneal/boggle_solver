@@ -20,16 +20,7 @@ def check_lower_buckets(buckets, place=0):
             buckets[key] = bucketize(buckets[key],place + 1)
             check_lower_buckets(buckets[key], place + 1)
     return True
-
-def combine_buckets(buckets, result = []):
-    for key in sorted(buckets):
-        if type(buckets[key]) == list:
-            result.append(buckets[key][0])
-            return result
-        else:
-            combine_buckets(buckets[key])
-
-    return result        
+       
        
 def main():
     data = [ words.strip() for words in open('wordlist.txt','r')]
