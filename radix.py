@@ -1,4 +1,3 @@
-from pprint import pprint
 from collections import defaultdict
 
 def max_length(list_of_data):
@@ -22,13 +21,10 @@ def check_lower_buckets(buckets, place=0):
     return True
        
        
-def main():
+def word_buckets():
     data = [ words.strip() for words in open('wordlist.txt','r')]
     
     buckets = bucketize(data)
     check_lower_buckets(buckets)
-    print('\nThe most significant digit radix sort provides the following:\n')
-    pprint(buckets)
-    
+    return buckets
 
-main()

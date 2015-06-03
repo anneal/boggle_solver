@@ -6,7 +6,7 @@ from random import shuffle, randint
 def roll(sides):
     return sides[randint(0,5)]
 
-def main():
+def shake_board():
     dice = ['VITEGN',    # 1976 version dice
             'ACESLR',
             'VAZEDN',
@@ -25,11 +25,11 @@ def main():
             'URIGLW']
     shuffle(dice)
     board = list(map(roll,dice))
-
+    printable = board[:]
     print('-'*17)
     for rows in range(4):
         for cols in range(4):
-            print('| %s ' % board.pop(), end='')
+            print('| %s ' % printable.pop(), end='')
         print('|\n'+'-'*17)
 
-main()
+    return board
