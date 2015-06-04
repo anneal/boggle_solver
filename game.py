@@ -32,43 +32,28 @@ class game():
 
     def create_connections(self):
         for pos in range(len(self.board)):
+            print(pos)
+            print(self.board[pos].value + ' has:')
             conns = []
-            try: conns.append(self.board[pos - 5])
+            try: conns.append(self.board[pos - 5]); print('-5')
             except: pass
-            try: conns.append(self.board[pos - 4])
+            try: conns.append(self.board[pos - 4]); print('-4')
             except: pass
-            try: conns.append(self.board[pos - 3])
+            try: conns.append(self.board[pos - 3]); print('-3')
             except: pass
-            try: conns.append(self.board[pos - 1])
+            try: conns.append(self.board[pos - 1]); print('-1')
             except: pass
-            try: conns.append(self.board[pos + 1])
+            try: conns.append(self.board[pos + 1]); print('1')
             except: pass
-            try: conns.append(self.board[pos + 3])
+            try: conns.append(self.board[pos + 3]); print('3')
             except: pass
-            try: conns.append(self.board[pos + 4])
+            try: conns.append(self.board[pos + 4]); print('4')
             except: pass
-            try: conns.append(self.board[pos + 5])
+            try: conns.append(self.board[pos + 5]); print('5')
             except: pass
-            
-            """ If adding some logic makes it faster....?
-            if pos > self.size:
-                conns.append(self.board[pos - 4])
-                if pos % self.size != 1:
-                    conns.append(self.board[pos - 5])
-                if not (pos % self.size):
-                    conns.append(self.board[pos -3])
-            if pos < (self.size * (self.size - 1)):
-                conns.append(self.board[pos + 4])
-                if pos % self.size != 1:
-                    conns.append(self.board[pos + 5])
-                if not (pos % self.size):
-                    conns.append(self.board[pos + 3])
-            if pos % self.size != 1:
-                conns.append(self.board[pos - 1])
-            if not (pos % self.size):
-                conns.append(self.board[pos + 1])
-            """
-                
+
+            for j in conns:
+                print(j.value)
             self.board[pos].connections = conns
 
 
@@ -77,16 +62,39 @@ class game():
         printable = ('-' * 17 + '\n')
         for rows in range(self.size):
             for cols in range(self.size):
-                printable += ('| %s ' % print_list.pop())
+                printable += ('| %s ' % print_list.pop(0))
             printable += ('|\n' + '-' * 17 + '\n')
         return printable
 
     def generate_words(self):
+        self.solutions = []
         for letter in self.board:
-            DFS
-        
-        pass
+            self.DFS(letter)
+            letter.used = False
+        print(self.solutions)
 
-    def check_dictionary(self):
-        pass
-   
+    def DFS(self, letter, word = ''):
+        letter.used = True
+        for j in letter.connections:
+            print('Connection: ' + j.value)
+        word += letter.value.lower()
+        print("word is:" + word)
+        test = check_real_word(word)
+        print("test result is:" + str(test))
+        
+        if test:
+            print(1)
+            if len(word) >= 3 and test == word:
+                print(2)
+                self.solutions.append([word])
+            for connection in letter.connections:
+                print(3)
+                if not connection.used:
+                    self.DFS(connection, word)
+            print(4)
+            letter.used = False
+            word = word[:-1]
+        else:
+            print(5)
+            letter.used = False
+            word = word[:-1]
