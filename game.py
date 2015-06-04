@@ -1,5 +1,6 @@
 from random import shuffle
 from die import die
+from logic import check_real_word
 
 class game():
 
@@ -81,10 +82,11 @@ class game():
         return printable
 
     def generate_words(self):
+        for letter in self.board:
+            DFS
+        
         pass
 
     def check_dictionary(self):
         pass
-
-    
-    
+   
