@@ -1,5 +1,4 @@
 from random import shuffle
-from pprint import pprint
 from die import die
 from logic import check_real_word
 
@@ -28,36 +27,28 @@ class game():
         self.board = [ die(dice_values[j]) for j in range(self.size**2) ]
         shuffle(self.board)
         self.create_connections()
-        self.__repr__()
+        print(self)
 
 
     def create_connections(self):
         for pos in range(len(self.board)):
             conns = []
             if (pos + 1) > self.size:
-                try: conns.append(self.board[pos - 4])
-                except: pass
+                conns.append(self.board[pos - 4])
                 if (pos + 1) % self.size != 1:
-                    try: conns.append(self.board[pos - 5])
-                    except: pass
+                    conns.append(self.board[pos - 5])
                 if ((pos + 1) % self.size):
-                    try: conns.append(self.board[pos -3])
-                    except: pass
+                    conns.append(self.board[pos -3])
             if (pos + 1) <= (self.size * (self.size - 1)):
-                try: conns.append(self.board[pos + 4])
-                except: pass
+                conns.append(self.board[pos + 4])
                 if (pos + 1) % self.size != 1:
-                    try: conns.append(self.board[pos + 3])
-                    except: pass
+                    conns.append(self.board[pos + 3])
                 if ((pos + 1) % self.size):
-                    try: conns.append(self.board[pos + 5])
-                    except: pass
+                    conns.append(self.board[pos + 5])
             if (pos + 1) % self.size != 1:
-                try: conns.append(self.board[pos - 1])
-                except: pass
+                conns.append(self.board[pos - 1])
             if ((pos + 1) % self.size):
-                try: conns.append(self.board[pos + 1])
-                except: pass
+                conns.append(self.board[pos + 1])
             self.board[pos].connections = conns
 
 
@@ -71,7 +62,7 @@ class game():
         return printable
 
 
-    def generate_solutions(self):
+    def solve(self):
         self.solutions = []
         print('Solution search in progress......')
         for letter in self.board:
@@ -81,6 +72,8 @@ class game():
 
         print('Compiling the solutions.......')
         printable = [ ''.join(j) for j in self.solutions]
+        ## Alternate method instead of .join()
+        ## printable = sum(self.solutions, [])
         printable = list(set(printable))
         printable = sorted(printable)
         print('\nThe %s possible solutions are:' % len(printable))
