@@ -5,7 +5,5 @@ from game import game
 
 new_game = game()
 
-print(new_game)
-
-new_game.generate_solutions()
+new_game.solve()
 
