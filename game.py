@@ -1,10 +1,11 @@
 from random import shuffle
+from pprint import pprint
 from die import die
 from logic import check_real_word
 
 class game():
 
-    def __init__(self, size):
+    def __init__(self):
         "This game uses the 1976 dice"
         dice_values = ['VITEGN',
                 'ACESLR',
@@ -23,7 +24,7 @@ class game():
                 ['J','A','B','O','M','Qu'],
                 'URIGLW']
         
-        self.size = size
+        self.size = 4
         self.board = [ die(dice_values[j]) for j in range(self.size**2) ]
         shuffle(self.board)
         self.create_connections()
@@ -32,28 +33,31 @@ class game():
 
     def create_connections(self):
         for pos in range(len(self.board)):
-            print(pos)
-            print(self.board[pos].value + ' has:')
             conns = []
-            try: conns.append(self.board[pos - 5]); print('-5')
-            except: pass
-            try: conns.append(self.board[pos - 4]); print('-4')
-            except: pass
-            try: conns.append(self.board[pos - 3]); print('-3')
-            except: pass
-            try: conns.append(self.board[pos - 1]); print('-1')
-            except: pass
-            try: conns.append(self.board[pos + 1]); print('1')
-            except: pass
-            try: conns.append(self.board[pos + 3]); print('3')
-            except: pass
-            try: conns.append(self.board[pos + 4]); print('4')
-            except: pass
-            try: conns.append(self.board[pos + 5]); print('5')
-            except: pass
-
-            for j in conns:
-                print(j.value)
+            if (pos + 1) > self.size:
+                try: conns.append(self.board[pos - 4])
+                except: pass
+                if (pos + 1) % self.size != 1:
+                    try: conns.append(self.board[pos - 5])
+                    except: pass
+                if ((pos + 1) % self.size):
+                    try: conns.append(self.board[pos -3])
+                    except: pass
+            if (pos + 1) <= (self.size * (self.size - 1)):
+                try: conns.append(self.board[pos + 4])
+                except: pass
+                if (pos + 1) % self.size != 1:
+                    try: conns.append(self.board[pos + 3])
+                    except: pass
+                if ((pos + 1) % self.size):
+                    try: conns.append(self.board[pos + 5])
+                    except: pass
+            if (pos + 1) % self.size != 1:
+                try: conns.append(self.board[pos - 1])
+                except: pass
+            if ((pos + 1) % self.size):
+                try: conns.append(self.board[pos + 1])
+                except: pass
             self.board[pos].connections = conns
 
 
@@ -66,35 +70,37 @@ class game():
             printable += ('|\n' + '-' * 17 + '\n')
         return printable
 
-    def generate_words(self):
+
+    def generate_solutions(self):
         self.solutions = []
+        print('Solution search in progress......')
         for letter in self.board:
+            print('Searching for words starting with %s' % letter.value)
             self.DFS(letter)
             letter.used = False
-        print(self.solutions)
+
+        print('Compiling the solutions.......')
+        printable = [ ''.join(j) for j in self.solutions]
+        printable = list(set(printable))
+        printable = sorted(printable)
+        print('\nThe %s possible solutions are:' % len(printable))
+        for k in printable:
+            print('\t' + str(k))
+
 
     def DFS(self, letter, word = ''):
         letter.used = True
-        for j in letter.connections:
-            print('Connection: ' + j.value)
         word += letter.value.lower()
-        print("word is:" + word)
         test = check_real_word(word)
-        print("test result is:" + str(test))
         
         if test:
-            print(1)
-            if len(word) >= 3 and test == word:
-                print(2)
+            if len(word) >= 3 and test == word and word not in self.solutions:
                 self.solutions.append([word])
             for connection in letter.connections:
-                print(3)
                 if not connection.used:
                     self.DFS(connection, word)
-            print(4)
             letter.used = False
             word = word[:-1]
         else:
-            print(5)
             letter.used = False
             word = word[:-1]
