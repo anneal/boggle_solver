@@ -1,6 +1,5 @@
 from random import shuffle
 from die import die
-from logic import check_real_word
 
 class game():
 
@@ -27,6 +26,7 @@ class game():
         self.board = [ die(dice_values[j]) for j in range(self.size**2) ]
         shuffle(self.board)
         self.create_connections()
+        self.trie()
         print(self)
 
 
@@ -84,7 +84,7 @@ class game():
     def DFS(self, letter, word = ''):
         letter.used = True
         word += letter.value.lower()
-        test = check_real_word(word)
+        test = self.check_real_word(word)
         
         if test:
             if len(word) >= 3 and test == word and word not in self.solutions:
@@ -97,3 +97,28 @@ class game():
         else:
             letter.used = False
             word = word[:-1]
+
+
+    def trie(self):
+        wordlist = [ words.strip() for words in open('wordlist.txt','r') ]
+
+        self.valid_words = {}
+        for word in wordlist:
+            current_dict = self.valid_words
+            for letter in word:
+                current_dict = current_dict.setdefault(letter,{})
+            current_dict = current_dict.setdefault('END','END')
+
+    
+    def check_real_word(self, word):
+        current_dict = self.valid_words
+        
+        for letter in word:
+            if letter in current_dict:
+                current_dict = current_dict[letter]
+            else:
+                return False
+        if 'END' in current_dict:
+            return word
+        else:
+            return True
