@@ -1,6 +1,7 @@
 """ This module generates a Boggle board and produces the solutions """
 
 from random import shuffle
+from pprint import pprint
 from die import Die
 import sys
 import time
@@ -138,6 +139,8 @@ class Game():
                 current_dict = current_dict.setdefault(letter,{})
             current_dict = current_dict.setdefault('END','END')
 
+        pprint(self.valid_words)
+
     
     def check_real_word(self, word):
         """ This function returns
@@ -165,7 +168,7 @@ def main():
     with a 3 minute time limit.
     """
 
-    if sys.argv[1]:
+    if len(sys.argv) > 0:
         new_game = Game(int(sys.argv[1]))
     else:
         new_game = Game(4)
