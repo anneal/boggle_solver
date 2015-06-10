@@ -1,9 +1,11 @@
-### This boggle solver AI runs in Python 3.X with the following commands:
+### This boggle solver AI runs from the terminal in Python 3.X with the following commands:
 ***
 
-from game import game
+#### To solve the default 4x4 board with a three minute solution delay:
+$ python3 game.py
 
-new_game = game()
+#### To solve a 2x2, 3x3, or 4x4 board instead, pass the size
+$ python3 game.py 2
 
-new_game.solve()
-
+#### To change the time delay before the solution is revealed, enter a second argument (in seconds)
+$ python3 game.py 4 10
